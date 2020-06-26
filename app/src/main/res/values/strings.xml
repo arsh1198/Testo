@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Testo</string>
-    <string name="txtSign_up">Sign Up</string>
+    <string name="txtSign_Up">Sign Up</string>
+    <string name="txtSign_In">Sign In</string>
+    <string name="already_a_member">Already a Member ?</string>
+    <string name="new_here">New here?</string>
 </resources>

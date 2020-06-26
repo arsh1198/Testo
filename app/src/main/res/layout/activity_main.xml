@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/SignUpContainer"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     >
-    
+
     <TextView
-        android:id="@+id/txtSignUp"
+        android:id="@+id/txtFormHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txtSign_up"
+        android:text="@string/txtSign_Up"
         android:textSize="35sp"
         android:textColor="#fff"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:padding="10dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -80,5 +82,27 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="10dp"
-        android:text="Sign Up" />
+        android:text="@string/txtSign_Up" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/txtChangeMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/already_a_member"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/btnSwitchMode"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txtSign_In"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+    </LinearLayout>
 </LinearLayout>
