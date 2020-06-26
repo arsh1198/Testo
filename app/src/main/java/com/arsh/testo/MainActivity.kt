@@ -42,13 +42,16 @@ class MainActivity : AppCompatActivity() {
     fun signUp(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Welcome! ".plus(auth.currentUser?.email),
-                    Toast.LENGTH_SHORT
-                ).show()
+                auth.currentUser!!.sendEmailVerification().addOnCompleteListener{ task ->
+                    if (task.isSuccessful){
+                        Toast.makeText(this, "A verification email has been sent, verify your email to Log in.", Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                    }
+                }
             } else {
-                Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_LONG).show()
             }
         }
     }
