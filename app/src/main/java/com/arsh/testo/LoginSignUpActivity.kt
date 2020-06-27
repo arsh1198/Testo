@@ -1,0 +1,146 @@
+package com.arsh.testo
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.*
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
+class LoginSignUpActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var signUpContainer: LinearLayout
+    private lateinit var btnSwitchMode: Button
+    private lateinit var btnSignUp: Button
+    private lateinit var txtFormHeading: TextView
+    private lateinit var txtChangeMode: TextView
+    private lateinit var txtEmail: TextInputLayout
+    private lateinit var txtUserName: TextInputLayout
+    private lateinit var txtPassword: TextInputLayout
+    private var signUpMode: Boolean = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.login_signup_activity)
+
+        auth = Firebase.auth
+
+        signUpContainer = findViewById(R.id.SignUpContainer)
+        txtFormHeading = findViewById(R.id.txtFormHeading)
+        txtChangeMode = findViewById(R.id.txtChangeMode)
+        btnSwitchMode = findViewById(R.id.btnSwitchMode)
+        btnSignUp = findViewById(R.id.btnSignUp)
+        txtEmail = findViewById(R.id.txtSignUpEmail)
+        txtUserName = findViewById(R.id.txtSignUpUserId)
+        txtPassword = findViewById(R.id.txtPassword)
+
+        val email = txtEmail.editText?.text
+        val userName = txtUserName.editText?.text
+        val password = txtPassword.editText?.text
+
+        btnSignUp.setOnClickListener {
+
+            txtEmail.error = null
+            txtUserName.error = null
+            txtPassword.error = null
+
+            var failFlag = false
+
+            if (email.toString().trim().isEmpty()) {
+                failFlag = true
+                txtEmail.error = "Email cannot be Empty!"
+            }
+            if (password.toString().trim().isEmpty()) {
+                failFlag = true
+                txtPassword.error = "Please enter a Password!"
+            }
+            if (signUpMode) {
+                if (userName.toString().trim().isEmpty()) {
+                    failFlag = true
+                    txtUserName.error = "Username Required!"
+                }
+            }
+            if (!failFlag) {
+                if (signUpMode) {
+                    signUp(email.toString(), password.toString())
+                } else {
+                    signIn(email.toString(), password.toString())
+                }
+            }
+        }
+
+        btnSwitchMode.setOnClickListener {
+            switchMode()
+        }
+    }
+
+    private fun signUp(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                auth.currentUser!!.sendEmailVerification().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "A verification email has been sent, verify your email to Log in.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+            } else {
+                Toast.makeText(this@LoginSignUpActivity, task.exception?.message, Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
+    }
+
+    private fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                intent = Intent(this@LoginSignUpActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                Toast.makeText(
+                    this,
+                    "Logged In as ${txtUserName.editText?.text}",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(this@LoginSignUpActivity, task.exception?.message, Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
+    }
+
+    private fun switchMode() {
+        txtEmail.error = null
+        txtUserName.error = null
+        txtPassword.error = null
+        if (signUpMode) {
+            signUpMode = false
+            signUpContainer.removeViewAt(2)
+            changeStrings(R.string.txtSign_Up, R.string.txtSign_In)
+        } else {
+            signUpMode = true
+            signUpContainer.addView(txtUserName, 2)
+            changeStrings(R.string.txtSign_In, R.string.txtSign_Up)
+        }
+    }
+
+    private fun changeStrings(from: Int, to: Int) {
+        btnSignUp.text = getString(to)
+        btnSwitchMode.text = getString(from)
+        signUpContainer.removeViewAt(0)
+        txtFormHeading.text = getString(to)
+        signUpContainer.addView(txtFormHeading, 0)
+        when (to) {
+            R.string.txtSign_In -> txtChangeMode.text = getString(R.string.new_here)
+            R.string.txtSign_Up -> txtChangeMode.text = getString(R.string.already_a_member)
+        }
+    }
+}
+

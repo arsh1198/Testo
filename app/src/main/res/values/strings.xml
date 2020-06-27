@@ -4,4 +4,5 @@
     <string name="txtSign_In">Sign In</string>
     <string name="already_a_member">Already a Member ?</string>
     <string name="new_here">New here?</string>
+    <string name="log_out">log Out</string>
 </resources>
