@@ -2,7 +2,6 @@ package com.arsh.testo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -38,10 +37,32 @@ class MainActivity : AppCompatActivity() {
         txtPassword = findViewById(R.id.txtPassword)
 
         val email = txtEmail.editText?.text
+        val userName = txtUserName.editText?.text
         val password = txtPassword.editText?.text
 
         btnSignUp.setOnClickListener {
-            signUp(email.toString(), password.toString())
+
+            txtEmail.error = null
+            txtUserName.error = null
+            txtPassword.error = null
+
+            var failFlag = false
+
+            if (email.toString().trim().isEmpty()) {
+                failFlag = true
+                txtEmail.error = "Email cannot be Empty!"
+            }
+            if (password.toString().trim().isEmpty()) {
+                failFlag = true
+                txtPassword.error = "Please enter a Password!"
+            }
+            if (userName.toString().trim().isEmpty()) {
+                failFlag = true
+                txtUserName.error = "Username Required!"
+            }
+            if (!failFlag) {
+                signUp(email.toString(), password.toString())
+            }
         }
 
         btnSwitchMode.setOnClickListener {
@@ -70,11 +91,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun switchMode() {
+        txtEmail.error = null
+        txtUserName.error = null
+        txtPassword.error = null
         if (signUpMode) {
             signUpMode = false
             signUpContainer.removeViewAt(2)
             changeStrings(R.string.txtSign_Up, R.string.txtSign_In)
-
         } else {
             signUpMode = true
             signUpContainer.addView(txtUserName, 2)
