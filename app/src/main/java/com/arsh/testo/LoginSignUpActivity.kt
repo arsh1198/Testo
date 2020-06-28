@@ -3,10 +3,12 @@ package com.arsh.testo
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class LoginSignUpActivity : AppCompatActivity() {
@@ -16,10 +18,13 @@ class LoginSignUpActivity : AppCompatActivity() {
     private lateinit var btnSwitchMode: Button
     private lateinit var btnSignUp: Button
     private lateinit var txtFormHeading: TextView
+    private lateinit var headingContainer: LinearLayout
     private lateinit var txtChangeMode: TextView
     private lateinit var txtEmail: TextInputLayout
     private lateinit var txtUserName: TextInputLayout
     private lateinit var txtPassword: TextInputLayout
+    private lateinit var signUpProgressBar: ProgressBar
+
     private var signUpMode: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,16 +35,21 @@ class LoginSignUpActivity : AppCompatActivity() {
 
         signUpContainer = findViewById(R.id.SignUpContainer)
         txtFormHeading = findViewById(R.id.txtFormHeading)
+        headingContainer = findViewById(R.id.headingContainer)
         txtChangeMode = findViewById(R.id.txtChangeMode)
         btnSwitchMode = findViewById(R.id.btnSwitchMode)
         btnSignUp = findViewById(R.id.btnSignUp)
         txtEmail = findViewById(R.id.txtSignUpEmail)
         txtUserName = findViewById(R.id.txtSignUpUserId)
         txtPassword = findViewById(R.id.txtPassword)
+        signUpProgressBar = findViewById(R.id.signUpProgressBar)
 
         val email = txtEmail.editText?.text
         val userName = txtUserName.editText?.text
         val password = txtPassword.editText?.text
+
+        signUpProgressBar.visibility = View.GONE
+        switchMode()
 
         btnSignUp.setOnClickListener {
 
@@ -78,20 +88,25 @@ class LoginSignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp(email: String, password: String) {
+        signUpProgressBar.visibility = View.VISIBLE
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                auth.currentUser!!.sendEmailVerification().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
+                val user = auth.currentUser
+                user!!.sendEmailVerification().addOnCompleteListener { task2 ->
+                    if (task2.isSuccessful) {
+                        signUpProgressBar.visibility = View.GONE
                         Toast.makeText(
                             this,
                             "A verification email has been sent, verify your email to Log in.",
                             Toast.LENGTH_LONG
                         ).show()
+                        switchMode()
                     } else {
-                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, task2.exception?.message, Toast.LENGTH_LONG).show()
                     }
                 }
             } else {
+                signUpProgressBar.visibility = View.GONE
                 Toast.makeText(this@LoginSignUpActivity, task.exception?.message, Toast.LENGTH_LONG)
                     .show()
             }
@@ -99,27 +114,45 @@ class LoginSignUpActivity : AppCompatActivity() {
     }
 
     private fun signIn(email: String, password: String) {
+        signUpProgressBar.visibility = View.VISIBLE
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                intent = Intent(this@LoginSignUpActivity, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
+                val user = auth.currentUser
+                if (user!!.isEmailVerified) {
+                    intent = Intent(this@LoginSignUpActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    Toast.makeText(
+                        this,
+                        "Logged In as ${user.email}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    signUpProgressBar.visibility = View.GONE
+                    auth.signOut()
+                    Toast.makeText(
+                        this,
+                        "Please verify your email!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } else {
+                signUpProgressBar.visibility = View.GONE
                 Toast.makeText(
-                    this,
-                    "Logged In as ${txtUserName.editText?.text}",
+                    this@LoginSignUpActivity,
+                    task.exception?.message,
                     Toast.LENGTH_LONG
                 ).show()
-            } else {
-                Toast.makeText(this@LoginSignUpActivity, task.exception?.message, Toast.LENGTH_LONG)
-                    .show()
             }
         }
     }
 
     private fun switchMode() {
+
         txtEmail.error = null
         txtUserName.error = null
         txtPassword.error = null
+
         if (signUpMode) {
             signUpMode = false
             signUpContainer.removeViewAt(2)
@@ -131,16 +164,17 @@ class LoginSignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeStrings(from: Int, to: Int) {
-        btnSignUp.text = getString(to)
-        btnSwitchMode.text = getString(from)
+    private fun changeStrings(fromId: Int, toId: Int) {
+        btnSignUp.text = getString(toId)
+        btnSwitchMode.text = getString(fromId)
         signUpContainer.removeViewAt(0)
-        txtFormHeading.text = getString(to)
-        signUpContainer.addView(txtFormHeading, 0)
-        when (to) {
+        txtFormHeading.text = getString(toId)
+        signUpContainer.addView(headingContainer, 0)
+        when (toId) {
             R.string.txtSign_In -> txtChangeMode.text = getString(R.string.new_here)
             R.string.txtSign_Up -> txtChangeMode.text = getString(R.string.already_a_member)
         }
     }
 }
+
 

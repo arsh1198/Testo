@@ -15,15 +15,34 @@
         android:padding="20dp"
         tools:context=".LoginSignUpActivity">
 
-        <TextView
-            android:id="@+id/txtFormHeading"
+        <LinearLayout
+            android:id="@+id/headingContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/txtSign_Up"
-            android:textColor="#fff"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/txtFormHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/txtSign_Up"
+                android:textColor="#fff"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:layout_weight="9"/>
+
+            <com.google.android.material.progressindicator.ProgressIndicator
+                android:id="@+id/signUpProgressBar"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtSignUpEmail"
