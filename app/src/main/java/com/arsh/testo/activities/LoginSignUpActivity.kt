@@ -1,14 +1,14 @@
-package com.arsh.testo
+package com.arsh.testo.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.arsh.testo.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class LoginSignUpActivity : AppCompatActivity() {
@@ -156,11 +156,17 @@ class LoginSignUpActivity : AppCompatActivity() {
         if (signUpMode) {
             signUpMode = false
             signUpContainer.removeViewAt(2)
-            changeStrings(R.string.txtSign_Up, R.string.txtSign_In)
+            changeStrings(
+                R.string.txtSign_Up,
+                R.string.txtSign_In
+            )
         } else {
             signUpMode = true
             signUpContainer.addView(txtUserName, 2)
-            changeStrings(R.string.txtSign_In, R.string.txtSign_Up)
+            changeStrings(
+                R.string.txtSign_In,
+                R.string.txtSign_Up
+            )
         }
     }
 
@@ -171,8 +177,12 @@ class LoginSignUpActivity : AppCompatActivity() {
         txtFormHeading.text = getString(toId)
         signUpContainer.addView(headingContainer, 0)
         when (toId) {
-            R.string.txtSign_In -> txtChangeMode.text = getString(R.string.new_here)
-            R.string.txtSign_Up -> txtChangeMode.text = getString(R.string.already_a_member)
+            R.string.txtSign_In -> txtChangeMode.text = getString(
+                R.string.new_here
+            )
+            R.string.txtSign_Up -> txtChangeMode.text = getString(
+                R.string.already_a_member
+            )
         }
     }
 }

@@ -13,7 +13,7 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context=".LoginSignUpActivity">
+        tools:context=".activities.LoginSignUpActivity">
 
         <LinearLayout
             android:id="@+id/headingContainer"
@@ -22,13 +22,12 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/txtFormHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="@string/txtSign_Up"
-                android:textColor="#fff"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 android:layout_weight="9"/>
@@ -96,7 +95,6 @@
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -115,12 +113,11 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/txtChangeMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/already_a_member"
-                android:textColor="#fff" />
+                android:text="@string/already_a_member"/>
 
             <Button
                 android:id="@+id/btnSwitchMode"
