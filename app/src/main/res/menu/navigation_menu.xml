@@ -2,14 +2,17 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/miCreate"
         android:enabled="true"
         android:icon="@drawable/ic_create_test"
-        android:title="@string/title_create" />
+        android:title="@string/title_make" />
     <item
+        android:id="@+id/miTake"
         android:enabled="true"
         android:icon="@drawable/ic_take_test"
         android:title="@string/title_take" />
     <item
+        android:id="@+id/miSettings"
         android:enabled="true"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings" />

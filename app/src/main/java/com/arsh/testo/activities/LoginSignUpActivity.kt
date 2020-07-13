@@ -1,14 +1,20 @@
 package com.arsh.testo.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.arsh.testo.R
+import com.arsh.testo.dataClasses.UserModel
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class LoginSignUpActivity : AppCompatActivity() {
@@ -26,6 +32,7 @@ class LoginSignUpActivity : AppCompatActivity() {
     private lateinit var signUpProgressBar: ProgressBar
 
     private var signUpMode: Boolean = true
+    private var database = Firebase.database.reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +51,14 @@ class LoginSignUpActivity : AppCompatActivity() {
         txtPassword = findViewById(R.id.txtPassword)
         signUpProgressBar = findViewById(R.id.signUpProgressBar)
 
-        val email = txtEmail.editText?.text
-        val userName = txtUserName.editText?.text
-        val password = txtPassword.editText?.text
-
         signUpProgressBar.visibility = View.GONE
         switchMode()
 
         btnSignUp.setOnClickListener {
+
+            val email = txtEmail.editText?.text
+            val userName = txtUserName.editText?.text
+            val password = txtPassword.editText?.text
 
             txtEmail.error = null
             txtUserName.error = null
@@ -75,7 +82,7 @@ class LoginSignUpActivity : AppCompatActivity() {
             }
             if (!failFlag) {
                 if (signUpMode) {
-                    signUp(email.toString(), password.toString())
+                    signUp(userName.toString(), email.toString(), password.toString())
                 } else {
                     signIn(email.toString(), password.toString())
                 }
@@ -87,12 +94,24 @@ class LoginSignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp(email: String, password: String) {
+    private fun signUp(username: String, email: String, password: String) {
         signUpProgressBar.visibility = View.VISIBLE
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+
             if (task.isSuccessful) {
                 val user = auth.currentUser
-                user!!.sendEmailVerification().addOnCompleteListener { task2 ->
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = username
+                }
+
+                user!!.updateProfile(profileUpdates)
+                    .addOnCompleteListener { t ->
+                        if (t.isSuccessful) {
+                            registerUserToDb(user)
+                            Log.d("pliss", "User profile updated.")
+                        }
+                    }
+                user.sendEmailVerification().addOnCompleteListener { task2 ->
                     if (task2.isSuccessful) {
                         signUpProgressBar.visibility = View.GONE
                         Toast.makeText(
@@ -184,6 +203,11 @@ class LoginSignUpActivity : AppCompatActivity() {
                 R.string.already_a_member
             )
         }
+    }
+
+    private fun registerUserToDb(user: FirebaseUser) {
+        database.child("users").child(user.uid)
+            .setValue(UserModel(user.displayName.toString(), user.email.toString()))
     }
 }
 
