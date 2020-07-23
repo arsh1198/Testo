@@ -197,7 +197,7 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
         val questions = hashMapOf<String, Boolean>()
         for (i in 0 until radioGroup.childCount) {
             val radioButton = radioGroup.getChildAt(i) as MaterialRadioButton
-            questions.put(radioButton.text.toString(), radioButton.isChecked)
+            questions[radioButton.text.toString()] = radioButton.isChecked
         }
         val question = QuestionModel(body, questions)
         questionList.add(question)

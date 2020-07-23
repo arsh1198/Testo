@@ -6,21 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import com.arsh.testo.R
-import com.arsh.testo.dataClasses.TestModel
-import com.google.firebase.auth.ktx.auth
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.util.*
+import org.json.JSONArray
+import kotlin.collections.HashMap
 
 class TakeTestFragment : Fragment() {
     val args: TakeTestFragmentArgs by navArgs()
+    lateinit var txtTitle: MaterialTextView
+    lateinit var txtUser: MaterialTextView
+    lateinit var txtQuesCount: MaterialTextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,18 +33,44 @@ class TakeTestFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val testId = args.testId
+        txtTitle = view.findViewById(R.id.txtTitleTakeTest)
+        txtUser = view.findViewById(R.id.txtUserTakeTest)
+        txtQuesCount = view.findViewById(R.id.txtQuesCountTakeTest)
+
         getTest(testId)
         super.onViewCreated(view, savedInstanceState)
     }
+
     fun getTest(uId: String) {
-        Firebase.database.reference.child("tests").addValueEventListener(object : ValueEventListener {
+        val dbRef = Firebase.database.reference
+        dbRef.child("tests").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val tests = snapshot.value as HashMap<*,*>
-                Log.i("dekhlai", tests[uId].toString())
+                val testsObj = snapshot.value as HashMap<*, *>
+                val test = testsObj[uId] as HashMap<*, *>
+                val title = test["title"]
+                val userId = test["created_by"]
+                Log.i("tatti", "$title, $userId")
+                val questionsList = test["questions"] as ArrayList<*>
+                val questionCount = questionsList.size
+                dbRef.child("users").addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val usersObj = snapshot.value as HashMap<*, *>
+                        val user = usersObj[userId] as HashMap<*, *>
+                        val username = user["username"]
+                        txtTitle.text = title.toString()
+                        txtUser.text = "By $username"
+                        txtQuesCount.text = "$questionCount Questions"
+                    }
+                })
+
             }
         }
         )

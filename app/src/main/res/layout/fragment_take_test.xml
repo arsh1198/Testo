@@ -3,12 +3,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.TakeTestFragment">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".fragments.TakeTestFragment"
+    android:animateLayoutChanges="true">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/inLin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1.5"
+                >
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/txtTitleTakeTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Test Title"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/txtUserTakeTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Made By" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/txtQuesCountTakeTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Question Count"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        <Button
+            android:layout_weight=".5"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:text="Start"
+            android:layout_gravity="bottom"
+            />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerTakeTest"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
