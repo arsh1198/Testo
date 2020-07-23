@@ -9,6 +9,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.core.content.res.ComplexColorCompat.inflate
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.arsh.testo.R
 import com.arsh.testo.dataClasses.QuestionModel
 import com.arsh.testo.dataClasses.TestModel
@@ -34,6 +36,9 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
     lateinit var btnPrevQues: MaterialButton
     val defaultOptionsCount = 4
     var questionList = mutableListOf<QuestionModel>()
+    val args: CreateTestFragmentArgs by navArgs()
+    lateinit var title: String
+    lateinit var viewView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +53,8 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
 
         setHasOptionsMenu(true)
 
+        viewView = view
+        title = args.questtionTitle
         txtQuestionBody = view.findViewById(R.id.txtQuesBody)
         txtOptionsCount = view.findViewById(R.id.txtOptionsCount)
         btnIncreaseOptions = view.findViewById(R.id.btnIncreaseOptions)
@@ -120,15 +127,8 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
             }
             R.id.btnNextQues -> {
                 val validated = validateFields()
-                if (validated) {
-                    val body = txtQuestionBody.editText?.text.toString()
-                    val questions = hashMapOf<String, Boolean>()
-                    for (i in 0 until radioGroup.childCount) {
-                        val radioButton = radioGroup.getChildAt(i) as MaterialRadioButton
-                        questions.put(radioButton.text.toString(), radioButton.isChecked)
-                    }
-                    val question = QuestionModel(body, questions)
-                    questionList.add(question)
+                if(validated){
+                    addInfoToList()
                     resetFields()
                 }
             }
@@ -182,15 +182,33 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        postTest(questionList)
+        val validated = validateFields()
+        if (validated) {
+            addInfoToList()
+            postTest(questionList)
+            val navController = Navigation.findNavController(viewView)
+            navController.popBackStack()
+        }
         return super.onOptionsItemSelected(item)
     }
 
-    fun postTest(questions: MutableList<QuestionModel>){
+    fun addInfoToList() {
+        val body = txtQuestionBody.editText?.text.toString()
+        val questions = hashMapOf<String, Boolean>()
+        for (i in 0 until radioGroup.childCount) {
+            val radioButton = radioGroup.getChildAt(i) as MaterialRadioButton
+            questions.put(radioButton.text.toString(), radioButton.isChecked)
+        }
+        val question = QuestionModel(body, questions)
+        questionList.add(question)
+    }
+
+    fun postTest(questions: MutableList<QuestionModel>) {
         val database = Firebase.database.reference
         val user = Firebase.auth.currentUser
-        val test = TestModel(user?.uid.toString() ,questions)
-        database.child("tests").push().setValue(test)
+        val uidObj = database.child("tests").push()
+        val test = TestModel(uidObj.key.toString(), title, user?.uid.toString(), questions)
+        uidObj.setValue(test)
     }
 }
 

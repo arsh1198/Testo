@@ -21,10 +21,18 @@
         android:id="@+id/createTestFragment"
         android:name="com.arsh.testo.fragments.CreateTestFragment"
         android:label="fragment_create_test"
-        tools:layout="@layout/fragment_create_test" />
+        tools:layout="@layout/fragment_create_test" >
+        <argument
+            android:name="questtion_title"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/takeTestFragment"
         android:name="com.arsh.testo.fragments.TakeTestFragment"
         android:label="fragment_take_test"
-        tools:layout="@layout/fragment_take_test" />
+        tools:layout="@layout/fragment_take_test" >
+        <argument
+            android:name="testId"
+            app:argType="string" />
+    </fragment>
 </navigation>
