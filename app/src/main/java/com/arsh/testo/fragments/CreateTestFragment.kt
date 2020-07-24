@@ -118,7 +118,6 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
                         val text = txtOptions.editText?.text
                         addCardWithText(text.toString())
                         txtOptions.editText?.setText("")
-                        Log.i("Dekho", radioGroup.childCount.toString())
                         if (radioGroup.childCount == txtOptionsCount.text.toString().toInt()) {
                             btnAddOptions.isEnabled = false
                         }
