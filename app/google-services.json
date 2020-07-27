@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:148288228794:android:f8756efacc4571fd336183",
+        "mobilesdk_app_id": "1:148288228794:android:33a5e4e7badbc1ca336183",
         "android_client_info": {
-          "package_name": "com.arsh.testo"
+          "package_name": "com.arshramgarhia.otest"
         }
       },
       "oauth_client": [

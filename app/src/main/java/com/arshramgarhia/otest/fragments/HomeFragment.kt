@@ -1,28 +1,20 @@
-package com.arsh.testo.fragments
+package com.arshramgarhia.otest.fragments
 
-import android.icu.text.CaseMap
 import android.os.Bundle
-import android.os.Message
-import android.text.Layout
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.ActionOnlyNavDirections
+import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.arsh.testo.R
+import com.arshramgarhia.otest.fragments.HomeFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import java.util.zip.Inflater
 
 class HomeFragment : Fragment(), View.OnClickListener {
 
@@ -38,6 +30,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btnMakeTest).setOnClickListener(this)
@@ -73,7 +66,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
             .setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
         builder.setPositiveButton("Ok") { dialog, which ->
             val action =
-                HomeFragmentDirections.actionHomeFragmentToCreateTestFragment(testTitle.toString())
+                HomeFragmentDirections.actionHomeFragmentToCreateTestFragment(
+                    testTitle.toString()
+                )
             navController.navigate(action)
         }.setCancelable(false)
         builder.show()
@@ -90,7 +85,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
         builder.setView(dialogLayout)
             .setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
         builder.setPositiveButton("Ok") { dialog, which ->
-            val action = HomeFragmentDirections.actionHomeFragmentToTakeTestFragment(uId.toString())
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToTakeTestFragment(
+                    uId.toString()
+                )
             navController.navigate(action)
         }.setCancelable(false)
         builder.show()

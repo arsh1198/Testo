@@ -1,14 +1,13 @@
-package com.arsh.testo.activities
+package com.arshramgarhia.otest.activities
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import com.arsh.testo.R
-import com.arsh.testo.dataClasses.UserModel
+import com.arshramgarhia.otest.dataClasses.UserModel
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -207,7 +206,12 @@ class LoginSignUpActivity : AppCompatActivity() {
 
     private fun registerUserToDb(user: FirebaseUser) {
         database.child("users").child(user.uid)
-            .setValue(UserModel(user.displayName.toString(), user.email.toString()))
+            .setValue(
+                UserModel(
+                    user.displayName.toString(),
+                    user.email.toString()
+                )
+            )
     }
 }
 

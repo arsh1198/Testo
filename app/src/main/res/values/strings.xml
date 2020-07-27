@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Testo</string>
+    <string name="app_name">Otest</string>
     <string name="txtSign_Up">Sign Up</string>
     <string name="txtSign_In">Sign In</string>
     <string name="already_a_member">Already a Member ?</string>

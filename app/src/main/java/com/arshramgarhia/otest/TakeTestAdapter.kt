@@ -1,4 +1,4 @@
-package com.arsh.testo
+package com.arshramgarhia.otest
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.arsh.testo.dataClasses.QuestionModel
-import com.arsh.testo.fragments.TakeTestFragment
-import com.google.android.material.radiobutton.MaterialRadioButton
+import com.arsh.testo.R
+import com.arshramgarhia.otest.dataClasses.QuestionModel
 import com.google.android.material.textview.MaterialTextView
 
 class TakeTestAdapter(val questionList: ArrayList<QuestionModel>) :

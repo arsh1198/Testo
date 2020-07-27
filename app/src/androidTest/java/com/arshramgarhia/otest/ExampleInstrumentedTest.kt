@@ -1,4 +1,4 @@
-package com.arsh.testo
+package com.arshramgarhia.otest
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

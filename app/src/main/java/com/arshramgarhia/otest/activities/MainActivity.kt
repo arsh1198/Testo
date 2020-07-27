@@ -1,8 +1,15 @@
-package com.arsh.testo.activities
+package com.arshramgarhia.otest.activities
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.arsh.testo.R
 import com.google.firebase.auth.FirebaseAuth
@@ -24,6 +31,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val uri: Uri? = intent?.data
+        if (uri!=null) {
 
+            val list = uri.pathSegments as List<String>
+            val id = list[list.size - 1]
+            val bundle = bundleOf("id" to id)
+            val navGraph = findNavController(R.id.nav_host_fragment_container)
+            navGraph.navigate(R.id.action_homeFragment_to_takeTestFragment, bundle)
+            Log.i("uriId", id)
+        }
     }
 }

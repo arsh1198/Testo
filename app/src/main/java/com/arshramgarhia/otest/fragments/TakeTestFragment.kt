@@ -1,4 +1,4 @@
-package com.arsh.testo.fragments
+package com.arshramgarhia.otest.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsh.testo.R
-import com.arsh.testo.TakeTestAdapter
-import com.arsh.testo.dataClasses.QuestionModel
-import com.arsh.testo.dataClasses.TestModel
+import com.arshramgarhia.otest.TakeTestAdapter
+import com.arshramgarhia.otest.dataClasses.QuestionModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.database.DataSnapshot
@@ -22,7 +23,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_take_test.*
-import org.json.JSONArray
 import kotlin.collections.HashMap
 
 class TakeTestFragment : Fragment() {
@@ -45,7 +45,7 @@ class TakeTestFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val testId = args.testId
+        /*val testId = args.testId*/
         cardView = view.findViewById(R.id.cardTestInfoTakeTest)
         txtTitle = view.findViewById(R.id.txtTitleTakeTest)
         txtUser = view.findViewById(R.id.txtUserTakeTest)
@@ -64,7 +64,7 @@ class TakeTestFragment : Fragment() {
             cardView.visibility = View.GONE
         }
 
-        getTest(testId)
+        /*getTest(testId)*/
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -88,7 +88,11 @@ class TakeTestFragment : Fragment() {
                     val data = it as HashMap<*, *>
                     val body = data["question_body"]
                     val options = data["options"] as HashMap<String, Boolean>
-                    val questionModel = QuestionModel(body.toString(), options)
+                    val questionModel =
+                        QuestionModel(
+                            body.toString(),
+                            options
+                        )
                     questionList.add(questionModel)
                     Log.i("dekhlai", questionList.toString())
                 }
@@ -111,5 +115,12 @@ class TakeTestFragment : Fragment() {
             }
         }
         )
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val id = arguments?.getString("id")
+        getTest(id.toString())
+        Toast.makeText(requireContext(), id, Toast.LENGTH_LONG).show()
     }
 }

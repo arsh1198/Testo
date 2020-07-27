@@ -1,19 +1,14 @@
-package com.arsh.testo.fragments
+package com.arshramgarhia.otest.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.view.View.inflate
-import androidx.fragment.app.Fragment
-import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.Toast
-import androidx.core.content.res.ComplexColorCompat.inflate
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.arsh.testo.R
-import com.arsh.testo.dataClasses.QuestionModel
-import com.arsh.testo.dataClasses.TestModel
+import com.arshramgarhia.otest.dataClasses.QuestionModel
+import com.arshramgarhia.otest.dataClasses.TestModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.snackbar.Snackbar
@@ -22,7 +17,6 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class CreateTestFragment : Fragment(), View.OnClickListener {
     lateinit var txtQuestionBody: TextInputLayout
@@ -198,7 +192,8 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
             val radioButton = radioGroup.getChildAt(i) as MaterialRadioButton
             questions[radioButton.text.toString()] = radioButton.isChecked
         }
-        val question = QuestionModel(body, questions)
+        val question =
+            QuestionModel(body, questions)
         questionList.add(question)
     }
 
@@ -206,7 +201,12 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
         val database = Firebase.database.reference
         val user = Firebase.auth.currentUser
         val uidObj = database.child("tests").push()
-        val test = TestModel(uidObj.key.toString(), title, user?.uid.toString(), questions)
+        val test = TestModel(
+            uidObj.key.toString(),
+            title,
+            user?.uid.toString(),
+            questions
+        )
         uidObj.setValue(test)
     }
 }

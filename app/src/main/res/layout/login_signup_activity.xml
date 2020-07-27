@@ -14,7 +14,7 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context=".activities.LoginSignUpActivity">
+        tools:context="com.arshramgarhia.otest.activities.LoginSignUpActivity">
 
         <LinearLayout
             android:id="@+id/headingContainer"

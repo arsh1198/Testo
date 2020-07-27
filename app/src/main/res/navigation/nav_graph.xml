@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.arsh.testo.fragments.HomeFragment"
+        android:name="com.arshramgarhia.otest.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/createTestFragment"
-        android:name="com.arsh.testo.fragments.CreateTestFragment"
+        android:name="com.arshramgarhia.otest.fragments.CreateTestFragment"
         android:label="fragment_create_test"
         tools:layout="@layout/fragment_create_test" >
         <argument
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/takeTestFragment"
-        android:name="com.arsh.testo.fragments.TakeTestFragment"
+        android:name="com.arshramgarhia.otest.fragments.TakeTestFragment"
         android:label="fragment_take_test"
         tools:layout="@layout/fragment_take_test" >
         <argument

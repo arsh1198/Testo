@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".fragments.TakeTestFragment"
+    tools:context="com.arshramgarhia.otest.fragments.TakeTestFragment"
     android:animateLayoutChanges="true">
 
     <com.google.android.material.card.MaterialCardView
