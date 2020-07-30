@@ -39,6 +39,8 @@ class LoginSignUpActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        ifLoggedIn()
+
         signUpContainer = findViewById(R.id.SignUpContainer)
         txtFormHeading = findViewById(R.id.txtFormHeading)
         headingContainer = findViewById(R.id.headingContainer)
@@ -137,9 +139,7 @@ class LoginSignUpActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 if (user!!.isEmailVerified) {
-                    intent = Intent(this@LoginSignUpActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    toNextActivity()
                     Toast.makeText(
                         this,
                         "Logged In as ${user.email}",
@@ -212,6 +212,17 @@ class LoginSignUpActivity : AppCompatActivity() {
                     user.email.toString()
                 )
             )
+    }
+    private fun ifLoggedIn(){
+        if (auth.currentUser != null){
+            toNextActivity()
+        }
+    }
+
+    private fun toNextActivity(){
+        intent = Intent(this@LoginSignUpActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 

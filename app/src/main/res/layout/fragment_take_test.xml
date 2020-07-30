@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context="com.arshramgarhia.otest.fragments.TakeTestFragment"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:padding="5dp"
+    tools:context="com.arshramgarhia.otest.fragments.TakeTestFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTestInfoTakeTest"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        >
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,9 +25,8 @@
                 android:id="@+id/inLin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_weight="1.5"
-                >
+                android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/txtTitleTakeTest"
@@ -55,14 +53,14 @@
                     android:textSize="16dp"
                     android:textStyle="bold" />
             </LinearLayout>
-        <Button
-            android:id="@+id/startTest"
-            android:layout_weight=".5"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:text="Start"
-            android:layout_gravity="bottom"
-            />
+
+            <Button
+                android:id="@+id/startTest"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_weight=".5"
+                android:text="Start" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -70,8 +68,12 @@
         android:id="@+id/recyclerTakeTest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="gone"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:text="Submit" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,11 +44,12 @@ class TakeTestFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*val testId = args.testId*/
+        val testId = args.testId
         cardView = view.findViewById(R.id.cardTestInfoTakeTest)
         txtTitle = view.findViewById(R.id.txtTitleTakeTest)
         txtUser = view.findViewById(R.id.txtUserTakeTest)
         txtQuesCount = view.findViewById(R.id.txtQuesCountTakeTest)
+
         btnStartTest = view.findViewById(R.id.startTest)
         recyclerView = view.findViewById(R.id.recyclerTakeTest)
 
@@ -63,8 +63,8 @@ class TakeTestFragment : Fragment() {
             recyclerTakeTest.visibility = View.VISIBLE
             cardView.visibility = View.GONE
         }
-
-        /*getTest(testId)*/
+        if(testId != "blank")
+            getTest(testId)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -109,7 +109,6 @@ class TakeTestFragment : Fragment() {
                         txtTitle.text = title.toString()
                         txtUser.text = "By $username"
                         txtQuesCount.text = "$questionCount Questions"
-                        var a = ArrayList<QuestionModel>()
                     }
                 })
             }
@@ -120,7 +119,9 @@ class TakeTestFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val id = arguments?.getString("id")
-        getTest(id.toString())
-        Toast.makeText(requireContext(), id, Toast.LENGTH_LONG).show()
+        if (id != null) {
+            getTest(id.toString())
+            Toast.makeText(requireContext(), id, Toast.LENGTH_LONG).show()
+        }
     }
 }

@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
 
         val uri: Uri? = intent?.data
         if (uri!=null) {
-
             val list = uri.pathSegments as List<String>
             val id = list[list.size - 1]
             val bundle = bundleOf("id" to id)

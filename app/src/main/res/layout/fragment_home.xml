@@ -23,5 +23,12 @@
             android:text="@string/title_take"
             android:layout_below="@+id/btnMakeTest"
             android:layout_centerHorizontal="true"/>
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 </FrameLayout>

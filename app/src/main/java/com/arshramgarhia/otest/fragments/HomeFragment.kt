@@ -1,5 +1,6 @@
 package com.arshramgarhia.otest.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,9 +13,12 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.arsh.testo.R
+import com.arshramgarhia.otest.activities.LoginSignUpActivity
 import com.arshramgarhia.otest.fragments.HomeFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment(), View.OnClickListener {
 
@@ -35,6 +39,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.btnMakeTest).setOnClickListener(this)
         view.findViewById<Button>(R.id.btnTakeTest).setOnClickListener(this)
+        view.findViewById<Button>(R.id.btnLogout).setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -51,6 +56,12 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 "Enter to take a test!",
                 " The Id is used to identify a test"
             )
+            R.id.btnLogout -> {
+                Firebase.auth.signOut()
+                val intent = Intent(activity, LoginSignUpActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
         }
     }
 

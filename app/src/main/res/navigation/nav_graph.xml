@@ -33,6 +33,7 @@
         tools:layout="@layout/fragment_take_test" >
         <argument
             android:name="testId"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="blank" />
     </fragment>
 </navigation>

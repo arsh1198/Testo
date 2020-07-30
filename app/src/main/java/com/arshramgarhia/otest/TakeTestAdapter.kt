@@ -13,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView
 class TakeTestAdapter(val questionList: ArrayList<QuestionModel>) :
     RecyclerView.Adapter<TakeTestAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val txtQuesNumber = itemView.findViewById<MaterialTextView>(R.id.txtQuesNumber)
         val txtQuesBody = itemView.findViewById<MaterialTextView>(R.id.txtQuesBodyTakeTest)
         val radioGroup = itemView.findViewById<RadioGroup>(R.id.radioGroupTakeTest)
     }
@@ -28,6 +29,8 @@ class TakeTestAdapter(val questionList: ArrayList<QuestionModel>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val quesNum = position + 1
+        holder.txtQuesNumber.text = "#".plus(quesNum)
         holder.txtQuesBody.text = questionList[position].question_body
         val radioGroup = holder.radioGroup
         val options = questionList[position].options
