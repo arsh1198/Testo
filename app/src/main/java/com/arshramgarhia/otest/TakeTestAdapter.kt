@@ -41,8 +41,7 @@ class TakeTestAdapter(val questionList: ArrayList<QuestionModel>) :
             i++
         }
         if (options.size == 2) {
-            for (j in radioGroup.childCount - 1 downTo 2)
-                radioGroup.getChildAt(j).visibility = View.GONE
+            radioGroup.removeViews(2, 2)
         }
     }
 }

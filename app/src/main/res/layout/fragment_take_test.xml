@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:padding="5dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     tools:context="com.arshramgarhia.otest.fragments.TakeTestFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTestInfoTakeTest"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp">
@@ -68,12 +69,16 @@
         android:id="@+id/recyclerTakeTest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
         android:text="Submit" />
 
 </RelativeLayout>

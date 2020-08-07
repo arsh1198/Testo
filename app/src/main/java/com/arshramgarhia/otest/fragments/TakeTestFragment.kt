@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.get
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +31,7 @@ class TakeTestFragment : Fragment() {
     lateinit var txtUser: MaterialTextView
     lateinit var txtQuesCount: MaterialTextView
     lateinit var btnStartTest: Button
+    lateinit var btnSubmit: Button
     lateinit var recyclerView: RecyclerView
 
     var questionList = ArrayList<QuestionModel>()
@@ -51,6 +52,10 @@ class TakeTestFragment : Fragment() {
         txtQuesCount = view.findViewById(R.id.txtQuesCountTakeTest)
 
         btnStartTest = view.findViewById(R.id.startTest)
+        btnSubmit = view.findViewById(R.id.btnSubmit)
+        btnSubmit.setOnClickListener {
+            getSelected()
+        }
         recyclerView = view.findViewById(R.id.recyclerTakeTest)
 
         recyclerView.layoutManager =
@@ -63,7 +68,7 @@ class TakeTestFragment : Fragment() {
             recyclerTakeTest.visibility = View.VISIBLE
             cardView.visibility = View.GONE
         }
-        if(testId != "blank")
+        if (testId != "blank")
             getTest(testId)
         super.onViewCreated(view, savedInstanceState)
     }
@@ -114,6 +119,21 @@ class TakeTestFragment : Fragment() {
             }
         }
         )
+    }
+
+    fun getSelected() {
+        Log.i("vencho list sizwe", questionList.size.toString())
+        for (i in 0 until questionList.size) {
+            val view = recyclerView.layoutManager?.findViewByPosition(i) as LinearLayout
+            val rel = view.getChildAt(1) as MaterialCardView
+            val ll = rel.getChildAt(0) as LinearLayout
+            val rg = ll.getChildAt(1) as RadioGroup
+            Log.i("vencho rg sizwe", rg.childCount.toString())
+            for (j in 0 until rg.childCount) {
+                val rb = rg.getChildAt(j) as RadioButton
+                Log.i("vencho", rb.text.toString())
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
