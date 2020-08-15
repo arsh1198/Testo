@@ -23,6 +23,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_take_test.*
 import kotlin.collections.HashMap
+import kotlin.math.log
 
 class TakeTestFragment : Fragment() {
     val args: TakeTestFragmentArgs by navArgs()
@@ -35,6 +36,7 @@ class TakeTestFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
 
     var questionList = ArrayList<QuestionModel>()
+    var correctOptions = HashMap<String, String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,15 +55,19 @@ class TakeTestFragment : Fragment() {
 
         btnStartTest = view.findViewById(R.id.startTest)
         btnSubmit = view.findViewById(R.id.btnSubmit)
-        btnSubmit.setOnClickListener {
-            getSelected()
-        }
+
         recyclerView = view.findViewById(R.id.recyclerTakeTest)
 
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val adapter = TakeTestAdapter(questionList)
         recyclerView.adapter = adapter
+
+        btnSubmit.setOnClickListener {
+            val selectedOptions = adapter.getSelected()
+            val score = checkScores(selectedOptions)
+            Toast.makeText(requireContext(), "scores -> $score/${selectedOptions.size}", Toast.LENGTH_SHORT).show()
+        }
 
         btnStartTest.setOnClickListener {
             /*adapter.notifyDataSetChanged()*/
@@ -89,10 +95,15 @@ class TakeTestFragment : Fragment() {
                 Log.i("tatti", "$title, $userId")
                 val questions = test["questions"] as ArrayList<*>
                 val questionCount = questions.size
-                questions.map {
+                questions.mapIndexed { index, it ->
                     val data = it as HashMap<*, *>
                     val body = data["question_body"]
                     val options = data["options"] as HashMap<String, Boolean>
+                    options.map { op ->
+                        if (op.value) {
+                            correctOptions["$index"] = op.key
+                        }
+                    }
                     val questionModel =
                         QuestionModel(
                             body.toString(),
@@ -121,20 +132,6 @@ class TakeTestFragment : Fragment() {
         )
     }
 
-    fun getSelected() {
-        Log.i("vencho list sizwe", questionList.size.toString())
-        for (i in 0 until questionList.size) {
-            val view = recyclerView.layoutManager?.findViewByPosition(i) as LinearLayout
-            val rel = view.getChildAt(1) as MaterialCardView
-            val ll = rel.getChildAt(0) as LinearLayout
-            val rg = ll.getChildAt(1) as RadioGroup
-            Log.i("vencho rg sizwe", rg.childCount.toString())
-            for (j in 0 until rg.childCount) {
-                val rb = rg.getChildAt(j) as RadioButton
-                Log.i("vencho", rb.text.toString())
-            }
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -143,5 +140,14 @@ class TakeTestFragment : Fragment() {
             getTest(id.toString())
             Toast.makeText(requireContext(), id, Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun checkScores(map: HashMap<String, String>): Int {
+        var score = 0
+        map.map {
+            if (it.value == correctOptions[it.key])
+                score+=1
+        }
+        return score
     }
 }
