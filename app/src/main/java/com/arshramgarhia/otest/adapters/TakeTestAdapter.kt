@@ -1,6 +1,5 @@
-package com.arshramgarhia.otest
+package com.arshramgarhia.otest.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsh.testo.R
 import com.arshramgarhia.otest.dataClasses.QuestionModel
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 
 class TakeTestAdapter(val questionList: ArrayList<QuestionModel>) :

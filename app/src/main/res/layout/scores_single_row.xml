@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:animateLayoutChanges="true"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    tools:context="com.arshramgarhia.otest.fragments.TakeTestFragment">
-
+    android:layout_height="wrap_content"
+    >
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardTestInfoTakeTest"
+        android:id="@+id/cardTestInfoScore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        app:cardElevation="12dp">
+        android:layout_margin="20dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +25,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/txtTitleTakeTest"
+                    android:id="@+id/txtTitleScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -41,14 +34,14 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/txtUserTakeTest"
+                    android:id="@+id/txtUserScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="Made By" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/txtQuesCountTakeTest"
+                    android:id="@+id/txtQuesCountScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -57,33 +50,15 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/startTest"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtRecyclerScore"
                 android:layout_width="wrap_content"
-                android:layout_height="56dp"
-                android:layout_gravity="bottom"
-                android:layout_weight=".5"
-                android:text="Start" />
+                android:layout_height="wrap_content"
+                android:text="7/10"
+                android:textSize="25dp"
+                android:padding="5dp"
+                android:textStyle="bold"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerTakeTest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabBtnSubmit"
-        android:layout_marginVertical="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        app:srcCompat="@drawable/ic_done"
-        />
-
-</RelativeLayout>
+</LinearLayout>

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/miHome">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@id/miHome"
         android:name="com.arshramgarhia.otest.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
@@ -34,6 +34,28 @@
         <argument
             android:name="testId"
             app:argType="string"
-            android:defaultValue="blank" />
+            android:defaultValue="blank"/>
+        <action
+            android:id="@+id/action_takeTestFragment_to_scoresFragment"
+            app:destination="@id/scoresFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/scoresFragment"
+        android:name="com.arshramgarhia.otest.fragments.ScoresFragment"
+        android:label="fragment_scores"
+        tools:layout="@layout/fragment_scores" >
+        <argument
+            android:name="score"
+            app:argType="integer" />
+        <argument android:name="totalQues"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@id/miTests"
+        android:name="com.arshramgarhia.otest.fragments.MyTestsFragment"
+        android:label="MyTestsFragment" />
+    <fragment
+        android:id="@id/miScores"
+        android:name="com.arshramgarhia.otest.fragments.MyScoresFragment"
+        android:label="MyScoresFragment" />
 </navigation>

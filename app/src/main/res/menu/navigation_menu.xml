@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/miCreate"
-        android:enabled="true"
-        android:icon="@drawable/ic_create_test"
-        android:title="@string/title_make" />
-    <item
-        android:id="@+id/miTake"
-        android:enabled="true"
-        android:icon="@drawable/ic_take_test"
-        android:title="@string/title_take" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/miHome"
+            android:title="Home" />
+        <item
+            android:id="@+id/miTests"
+            android:title="Tests" />
+        <item
+            android:id="@+id/miScores"
+            android:title="Scores" />
+    </group>
     <item
         android:id="@+id/miSettings"
-        android:enabled="true"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/title_settings" />
+        android:title="Settings" />
+    <item
+        android:id="@+id/miSignOut"
+        android:title="Sign Out" />
 </menu>
