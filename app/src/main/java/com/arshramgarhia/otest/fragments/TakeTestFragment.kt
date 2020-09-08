@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_take_test.*
+import java.lang.Exception
 
 class TakeTestFragment : Fragment() {
     val args: TakeTestFragmentArgs by navArgs()
@@ -42,10 +43,12 @@ class TakeTestFragment : Fragment() {
     var questionList = ArrayList<QuestionModel>()
     var correctOptions = HashMap<String, String>()
 
+    val dbRef = Firebase.database.reference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         testId = arguments?.getString("id").toString()
         testId = args.testId
-        getTest(testId)
+
         Toast.makeText(requireContext(), testId, Toast.LENGTH_LONG).show()
         super.onCreate(savedInstanceState)
     }
@@ -59,7 +62,7 @@ class TakeTestFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        getTest(testId)
         navController = Navigation.findNavController(view)
 
 
@@ -75,10 +78,10 @@ class TakeTestFragment : Fragment() {
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 &&  fabSubmit.isShown) {
+                if (dy > 0 && fabSubmit.isShown) {
                     fabSubmit.hide()
                 }
-                if (dy < 0 &&  fabSubmit.isOrWillBeHidden) {
+                if (dy < 0 && fabSubmit.isOrWillBeHidden) {
                     fabSubmit.show()
                 }
             }
@@ -101,6 +104,8 @@ class TakeTestFragment : Fragment() {
             /*adapter.notifyDataSetChanged()*/
             recyclerTakeTest.visibility = View.VISIBLE
             cardView.visibility = View.GONE
+            fabSubmit.visibility = View.VISIBLE
+
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -108,53 +113,48 @@ class TakeTestFragment : Fragment() {
 
     fun getTest(uId: String) {
         questionList.clear()
-        val dbRef = Firebase.database.reference
-        dbRef.child("tests").addValueEventListener(object : ValueEventListener {
+        dbRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val testsObj = snapshot.value as HashMap<*, *>
-                Log.i("testObj", uId)
-                val test = testsObj[uId] as HashMap<*, *>
-                val title = test["title"]
-                val userId = test["created_by"]
-                Log.i("tatti", "$title, $userId")
-                val questions = test["questions"] as ArrayList<*>
-                val questionCount = questions.size
-                questions.mapIndexed { index, it ->
-                    val data = it as HashMap<*, *>
-                    val body = data["question_body"]
-                    val options = data["options"] as HashMap<String, Boolean>
-                    options.map { op ->
-                        if (op.value) {
-                            correctOptions["$index"] = op.key
+                try {
+                    val testsObj = snapshot.child("tests").value as HashMap<*, *>
+                    val userObj = snapshot.child("users").value as HashMap<*, *>
+                    Log.i("testObj", uId)
+                    val test = testsObj[uId] as HashMap<*, *>
+                    val title = test["title"]
+                    val userId = test["created_by"]
+                    Log.i("tatti", "$title, $userId")
+                    val questions = test["questions"] as ArrayList<*>
+                    val questionCount = questions.size
+                    questions.mapIndexed { index, it ->
+                        val data = it as HashMap<*, *>
+                        val body = data["question_body"]
+                        val options = data["options"] as HashMap<String, Boolean>
+                        options.map { op ->
+                            if (op.value) {
+                                correctOptions["$index"] = op.key
+                            }
                         }
+                        val questionModel =
+                            QuestionModel(
+                                body.toString(),
+                                options
+                            )
+                        questionList.add(questionModel)
+                        Log.i("dekhlai", questionList.toString())
                     }
-                    val questionModel =
-                        QuestionModel(
-                            body.toString(),
-                            options
-                        )
-                    questionList.add(questionModel)
-                    Log.i("dekhlai", questionList.toString())
+                    val creator = userObj[userId] as HashMap<*,*>
+                    val userName = creator["username"] as String
+                    txtTitle.text = title.toString()
+                    txtUser.text = "By $userName"
+                    txtQuesCount.text = "$questionCount Questions"
+                    cardView.visibility = View.VISIBLE
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
                 }
-
-                dbRef.child("users").addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val usersObj = snapshot.value as HashMap<*, *>
-                        val user = usersObj[userId] as HashMap<*, *>
-                        val username = user["username"]
-                        txtTitle.text = title.toString()
-                        txtUser.text = "By $username"
-                        txtQuesCount.text = "$questionCount Questions"
-                    }
-                })
             }
         }
         )
@@ -177,7 +177,7 @@ class TakeTestFragment : Fragment() {
         navController.navigate(action)
     }
 
-    fun registerScoreToDB(score: Int){
+    fun registerScoreToDB(score: Int) {
         val database = Firebase.database.reference
         val users = database.child("users")
         val scores = users.child(Firebase.auth.currentUser!!.uid).child("scores")

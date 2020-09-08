@@ -174,6 +174,7 @@ class CreateTestFragment : Fragment(), View.OnClickListener {
     }
 
     fun resetFields() {
+        btnAddOptions.isEnabled = true
         txtQuestionBody.editText?.setText("")
         txtOptions.editText?.setText("")
         txtQuestionBody.requestFocus()
