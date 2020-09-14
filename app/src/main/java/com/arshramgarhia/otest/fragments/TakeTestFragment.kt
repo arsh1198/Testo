@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_take_test.*
 import java.lang.Exception
 
 class TakeTestFragment : Fragment() {
-    val args: TakeTestFragmentArgs by navArgs()
+    val navArgs: TakeTestFragmentArgs by navArgs()
     lateinit var cardView: MaterialCardView
     lateinit var txtTitle: MaterialTextView
     lateinit var txtUser: MaterialTextView
@@ -46,8 +46,8 @@ class TakeTestFragment : Fragment() {
     val dbRef = Firebase.database.reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        testId = arguments?.getString("id").toString()
-        testId = args.testId
+        val argFromUri = arguments?.getString("id")
+        testId = argFromUri ?: navArgs.testId
 
         Toast.makeText(requireContext(), testId, Toast.LENGTH_LONG).show()
         super.onCreate(savedInstanceState)
@@ -70,10 +70,8 @@ class TakeTestFragment : Fragment() {
         txtTitle = view.findViewById(R.id.txtTitleTakeTest)
         txtUser = view.findViewById(R.id.txtUserTakeTest)
         txtQuesCount = view.findViewById(R.id.txtQuesCountTakeTest)
-
         btnStartTest = view.findViewById(R.id.startTest)
         fabSubmit = view.findViewById(R.id.fabBtnSubmit)
-
         recyclerView = view.findViewById(R.id.recyclerTakeTest)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -101,8 +99,7 @@ class TakeTestFragment : Fragment() {
         }
 
         btnStartTest.setOnClickListener {
-            /*adapter.notifyDataSetChanged()*/
-            recyclerTakeTest.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
             cardView.visibility = View.GONE
             fabSubmit.visibility = View.VISIBLE
 
@@ -112,6 +109,7 @@ class TakeTestFragment : Fragment() {
     }
 
     fun getTest(uId: String) {
+        Log.i("recievedID", uId)
         questionList.clear()
         dbRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -153,7 +151,7 @@ class TakeTestFragment : Fragment() {
                     txtQuesCount.text = "$questionCount Questions"
                     cardView.visibility = View.VISIBLE
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
