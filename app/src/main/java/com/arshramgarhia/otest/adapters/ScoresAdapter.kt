@@ -19,12 +19,11 @@ import kotlinx.coroutines.launch
 import kotlin.system.measureNanoTime
 
 class ScoresAdapter(val testList: ArrayList<TestModel>): RecyclerView.Adapter<ScoresAdapter.ViewHolder>(){
-    val databse = Firebase.database.reference
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val txtTtile = itemView.findViewById<MaterialTextView>(R.id.txtTitleScore)
         val txtMadeBy = itemView.findViewById<MaterialTextView>(R.id.txtUserScore)
         val txtQuesCount = itemView.findViewById<MaterialTextView>(R.id.txtQuesCountScore)
-        val txtScore = itemView.findViewById<MaterialTextView>(R.id.txtRecyclerScore)
+        val txtScore = itemView.findViewById<MaterialTextView>(R.id.txtRecyclerScoreAndResponse)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

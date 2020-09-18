@@ -5,31 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arsh.testo.R
+import com.arshramgarhia.otest.adapters.MyTestsAdapter
+import com.arshramgarhia.otest.adapters.ScoresAdapter
+import com.arshramgarhia.otest.dataClasses.QuestionModel
+import com.arshramgarhia.otest.dataClasses.TestModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyTestsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MyTestsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    val user = Firebase.auth.currentUser
+    val database = Firebase.database.reference
+    lateinit var adapter: MyTestsAdapter
+    var testList = arrayListOf<TestModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,23 +33,46 @@ class MyTestsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_my_tests, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyTestsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyTestsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val testObj = snapshot.child("tests").value as HashMap<*, *>
+                val users = snapshot.child("users").value as HashMap<*,*>
+                val Uid = user?.uid
+
+                testObj.map { obj ->
+                    var responses = 0
+                    val tests = obj.value as HashMap<*,*>
+                    val title = tests["title"] as String
+                    val createdBy = tests["created_by"] as String
+                    val questions = tests["questions"] as MutableList<QuestionModel>
+                    val testId = tests["uid"] as String
+                    val currUser = users["$Uid"] as HashMap<*,*>
+                    if(createdBy == Uid){
+                        val scores = currUser["scores"] as HashMap<*,*>?
+                        if (scores != null){
+                            scores.map {
+                                if (it.key == testId)
+                                    responses += 1
+                            }
+                            val test = TestModel(testId, title, "username", questions, responses.toString())
+                            testList.add(test)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
                 }
             }
+        })
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerMyTests)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter = MyTestsAdapter(testList)
+        recyclerView.adapter = adapter
     }
 }
