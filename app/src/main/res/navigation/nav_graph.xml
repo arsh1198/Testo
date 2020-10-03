@@ -53,9 +53,22 @@
     <fragment
         android:id="@id/miTests"
         android:name="com.arshramgarhia.otest.fragments.MyTestsFragment"
-        android:label="MyTestsFragment" />
+        android:label="MyTestsFragment" >
+        <action
+            android:id="@+id/action_miTests_to_checkScoresFragment"
+            app:destination="@id/checkScoresFragment" />
+    </fragment>
     <fragment
         android:id="@id/miScores"
         android:name="com.arshramgarhia.otest.fragments.MyScoresFragment"
         android:label="MyScoresFragment" />
+    <fragment
+        android:id="@+id/checkScoresFragment"
+        android:name="com.arshramgarhia.otest.fragments.CheckScoresFragment"
+        android:label="fragment_check_scores"
+        tools:layout="@layout/fragment_check_scores" >
+        <argument
+            android:name="testID"
+            app:argType="string" />
+    </fragment>
 </navigation>
