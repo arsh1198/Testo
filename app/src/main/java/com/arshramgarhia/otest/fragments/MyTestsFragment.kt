@@ -35,6 +35,7 @@ class MyTestsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        testList.clear()
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -55,16 +56,20 @@ class MyTestsFragment : Fragment() {
                     val testId = tests["uid"] as String
                     val currUser = users["$Uid"] as HashMap<*,*>
                     if(createdBy == Uid){
-                        val scores = currUser["scores"] as HashMap<*,*>?
-                        if (scores != null){
-                            scores.map {
-                                if (it.key == testId)
-                                    responses += 1
+                        users.map { userObj ->
+                            val user = userObj.value as HashMap<*, *>
+                            if(user["scores"]!=null){
+                                val scores = user["scores"] as HashMap<*, *>
+                                scores.map {
+                                    if(it.key == testId){
+                                        responses+=1
+                                    }
+                                }
                             }
-                            val test = TestModel(testId, title, "username", questions, responses.toString())
-                            testList.add(test)
-                            adapter.notifyDataSetChanged()
                         }
+                        val test = TestModel(testId, title, "username", questions, responses.toString())
+                        testList.add(test)
+                        adapter.notifyDataSetChanged()
                     }
                 }
             }
